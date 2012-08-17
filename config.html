@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block scriptblock %}
+<script type="text/javascript">
+function clear_video(){
+	$.ajax("/api?method=clear").fail(function(){ alert('ビデオのクリアに失敗！！');});
+}
+function scan_video(){
+	$.ajax("/api?method=scan").fail(function(){ alert('ビデオの収集に失敗！！');});
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<form action="/config" method="POST">
+<label for="basic">YouTube アカウントID：
+<input type="text" name="yt_id" data-mini="true" value="{%if vc.yt_id %}{{vc.yt_id}}{%endif%}"/></label>
+<label for="basic">YouTube パスワード：
+<input type="password" name="yt_pswd" data-mini="true" value="{%if vc.yt_pswd %}{{vc.yt_pswd}}{%endif%}"/></label>
+<label for="basic">YouTube 名前：
+<input type="text" name="yt_name" data-mini="true" value="{%if vc.yt_name %}{{vc.yt_name}}{%endif%}"/></label>
+<label for="basic">収集キーワード：
+<input type="text" name="keyword" data-mini="true" value="{%if vc.keyword %}{{vc.keyword}}{%endif%}"/></label>
+<label for="basic">表示パスワード：
+<input type="password" name="pswd" data-mini="true" value="{%if vc.pswd %}{{vc.pswd}}{%endif%}"/></label>
+<label for="basic">一度に表示するゲーム数：
+<input type="number" name="count" data-mini="true" value="{%if vc.fetch_count %}{{vc.fetch_count}}{%endif%}"/></label>
+<label for="basic">ホームURL：
+<input type="text" name="home_url" data-mini="true" value="{%if vc.home_url %}{{vc.home_url}}{%endif%}"/></label>
+<input type="submit" value="保存" />
+</form>
+{% endblock %}
+
+{% block footer %}
+<div data-role="navbar" data-iconpos="top">
+<ul>
+	<li><a href="javascript:scan_video();" data-role="button" data-icon="refresh">収集</a></li>
+	<li><a href="javascript:clear_video();" data-role="button" data-icon="delete">全削除</a></li>
+</ul>
+</div>
+{% endblock %}

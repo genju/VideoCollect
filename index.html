@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block scriptblock %}
+<script type="text/javascript">
+var count = 0;
+var thumbs = new Array();
+function changeThumbnail(){
+	$("a.thumbs img").each(function(i, elem){
+		var l = thumbs[i];
+		elem.src = l[count%l.length];
+	});
+	count++;
+}
+</script>
+{% endblock %}
+
+{% block mobileinitblock %}
+	var games;
+{% for gamelist in gamelists %}{% for game in gamelist.games %}var games{{for.loopcounter}} = new Array();{% for img in game.thumbs %}
+	games{{for.loopcounter}} .push("{{img}}");{% endfor %}
+	thumbs.push(games{{for.loopcounter}} );{% endfor %}{% endfor %}
+	setInterval(changeThumbnail, 3000);
+{% endblock %}
+
+{% block content %}
+<ul data-role="listview">
+{% for gamelist in gamelists %}
+<li data-role="listdivider">{{gamelist.description}}</li>
+{% for game in gamelist.games %}
+<li>
+<a class="thumbs" href="/game?game={{game.key}}">
+<img src="{{game.thumbnail}}" width="{{game.width}}" height="{{game.height}}"/>
+<h3>{{game.title}}</h3></a></li>{% endfor %}{% endfor %}
+</ul>
+{% endblock %}
+
+{% block footer %}
+<div data-role="navbar" data-iconpos="top">
+<ul>
+{% if has_prev %}
+	<li><a rel="external" href="/?pos={{prev}}" data-role="button" data-icon="arrow-l">前の動画</a></li>
+{% endif %}
+{% if next %}
+	<li><a rel="external" href="/?pos={{next}}" data-role="button" data-icon="arrow-r">次の動画</a></li>
+{% endif %}
+</ul>
+</div>
+{% endblock %}

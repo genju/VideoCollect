@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block header %}
+<a rel="external" href="/" data-icon="back" class="ui-btn-left">リスト画面</a>
+<h1>{{game.title}}</h1>
+<a rel="external" href="{{home_url}}" data-icon="home" data-direction="reverse" class="ui-btn-right jqm-home">{{home}}</a>
+{% endblock %}
+
+{% block content %}
+{% for entry in game.entries %}
+<div class="youtubeview">
+<h3>{{game.title}}&nbsp;{{entry.number}}</h3>
+<iframe width="640px" height="400px" frameborder="0" src="{{entry.embed}}" class="youtube-player" type="text/html" width="100%"></iframe>
+<a rel="external" data-role="button" href="{{entry.url}}" target="_blank">YouTubeサイトへ</a>
+</div>
+{% endfor %}
+{% endblock %}
+
+{% block footer %}
+<div data-role="navbar" data-iconpos="top">
+<ul>
+{% if game.has_prev %}
+	<li><a rel="external" href="/game?game={{game.prev.key}}" data-role="button" data-icon="arrow-l">前の試合</a></li>
+{% endif %}
+{% if game.has_next %}
+	<li><a rel="external" href="/game?game={{game.next.key}}" data-role="button" data-icon="arrow-r">次の試合</a></li>
+{% endif %}
+</ul>
+</div>
+{% endblock %}

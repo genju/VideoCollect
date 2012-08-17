@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block mobileinitblock %}
+$.mobile.ajaxEnabled = false;
+{% endblock %}
+
+{% block content %}
+<form action="/" method="POST">
+<label for="basic">キーワードは？
+<input type="text" name="keyword" data-mini="true" /></label>
+<label for="basic">パスワードは？
+<input type="password" name="pswd" data-mini="true" /></label>
+<input type="submit" value="開始" />
+</form>
+{% endblock %}
