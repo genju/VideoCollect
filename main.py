@@ -101,16 +101,13 @@ class Game(db.Model):
 	@staticmethod
 	def get_by_title(games, title, entry):
 		num = None
-		t = True
 		if title.endswith(u'Q'):
 			x, y = title.rsplit(u' ', 1)
 			num = int(y[:-1])
 			title = x
-			if num != 1: t = False
 		q = Game.gql(u'WHERE title = :1 AND games = :2', title, games)
 		if q.count() == 1:
-			if not t: return q.get(), num
-			ret = q.get()
+			return q.get(), num
 		else:
 			ret = Game()
 			ret.games = games
