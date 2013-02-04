@@ -8,6 +8,9 @@ function clear_video(){
 function scan_video(){
 	$.ajax("/api?method=scan").fail(function(){ alert('ビデオの収集に失敗！！');});
 }
+function create_gaem_list(){
+	$.ajax('/api?method=create&name="'+$("#gamelist").val()+'"').fail(function(){ alert("ゲームリストの作成");});
+}
 </script>
 {% endblock %}
 
@@ -27,6 +30,25 @@ function scan_video(){
 <input type="number" name="count" data-mini="true" value="{%if vc.fetch_count %}{{vc.fetch_count}}{%endif%}"/></label>
 <label for="basic">ホームURL：
 <input type="text" name="home_url" data-mini="true" value="{%if vc.home_url %}{{vc.home_url}}{%endif%}"/></label>
+<input type="submit" value="保存" />
+</form>
+<div>
+<input type="text" id="gamelist"/><button onclick="create_gaem_list();">ゲームリスト作成</button>
+</div>
+<form action="/api?method=addgame" method="POST">
+<label>ゲームリスト：<select name="gamelist">
+{% for gl in gamelists %}<option value="{{gl.key}}">{{gl.description}}</option>{% endfor %}
+</select></label>
+<label>ゲーム名：<input type="text" name="gamename" /></label>
+<label>ID1：<input type="text" name="game1" /></label>
+<label>ID2：<input type="text" name="game2" /></label>
+<label>ID3：<input type="text" name="game3" /></label>
+<label>ID4：<input type="text" name="game4" /></label>
+<label>ID5：<input type="text" name="game5" /></label>
+<label>ID6：<input type="text" name="game6" /></label>
+<label>ID7：<input type="text" name="game7" /></label>
+<label>ID8：<input type="text" name="game8" /></label>
+<label>ID9：<input type="text" name="game9" /></label>
 <input type="submit" value="保存" />
 </form>
 {% endblock %}

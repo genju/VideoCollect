@@ -215,11 +215,16 @@ class GameView(webapp.RequestHandler):
 class Config(webapp.RequestHandler):
 	def __show_config(self, vc):
 		path = os.path.join(os.path.dirname(__file__), u'config.html')
+		if vc is None:
+			gl = []
+		else:
+			gl = vc.gamelists()
 		self.response.out.write(template.render(path, {
 			u'title'	: u'Youtube収集設定',
 			u'home'		: u'トップ画面へ',
 			u'home_url'	: u'/',
 			u'pageid'	: u'ytcollectpage',
+			u'gamelists': gl,
 			u'vc'		: vc or VideoCollection()
 		}))
 		
@@ -254,6 +259,12 @@ class Api(webapp.RequestHandler):
 					g.delete()
 				gl.delete()
 			self.response.set_status(200)
+		if m == u'create':
+			gl = GameList()
+			gl.coll = vc;
+			gl.description = self.request.get(u'name')
+			gl.put()
+			self.response.set_status(200)
 		elif m == u'scan':
 			yt = video.CollectYouTube(vc.yt_id, vc.yt_pswd)
 			for entry in yt.collect(vc.yt_name, vc.keyword):
@@ -278,6 +289,34 @@ class Api(webapp.RequestHandler):
 				ve.hqheight = int(entry[u'hqheight'])
 				ve.put()
 			self.response.set_status(200)
+	def post(self):
+		gm = None
+		for i in range(1, 10):
+			ve = VideoEntry()
+			ve.videoid = self.request.get(u'game' + unicode(i))
+			if len(ve.videoid)==0: break
+			ve.number = i
+			ve.url = u'https://www.youtube.com/watch?v='+ve.videoid+'&feature=youtube_gdata'
+			ve.height = 90
+			ve.width = 120
+			ve.hqheight = 360
+			ve.hqwidth = 480
+			ve.thumbnail = u'http://i.ytimg.com/vi/'+ve.videoid+'/default.jpg'
+			ve.thumbnail1 = u'http://i.ytimg.com/vi/'+ve.videoid+'/1.jpg'
+			ve.thumbnail2 = u'http://i.ytimg.com/vi/'+ve.videoid+'/2.jpg'
+			ve.thumbnail3 = u'http://i.ytimg.com/vi/'+ve.videoid+'/3.jpg'
+			ve.hqthumbnail = u'http://i.ytimg.com/vi/'+ve.videoid+'/hqdefault.jpg'
+			if gm is None:
+				gm = Game()
+				gm.games = GameList.get(self.request.get(u'gamelist'))
+				gm.title = self.request.get(u'gamename')
+				gm.thumbnail = ve.thumbnail
+				gm.width = ve.width
+				gm.height = ve.height
+				gm.put()
+			ve.game = gm
+			ve.put()
+		self.redirect(u'/config')
 			
 				
 application = webapp.WSGIApplication(

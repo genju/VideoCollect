@@ -52,15 +52,17 @@ class CollectYouTube(object):
 
 	def collect(self, username, word):
 		ret = []
-		feed = self.__client.GetUserFeed(username=username)
-		while feed:
-			for entry in feed.entry:
-				if self._ismatch(entry.category, word):
-					ret.append(self._makelinkdata(entry))
-			if feed.GetNextLink():
-				feed = self.__client.GetNext(feed)
-			else:
-				feed = None
+		try:
+			feed = self.__client.GetUserFeed(username=username)
+			while feed:
+				for entry in feed.entry:
+					if self._ismatch(entry.category, word):
+						ret.append(self._makelinkdata(entry))
+				if feed.GetNextLink():
+					feed = self.__client.GetNext(feed)
+				else:
+					feed = None
+		except: pass
 		return ret
 
 
