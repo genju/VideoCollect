@@ -262,7 +262,7 @@ class Api(webapp.RequestHandler):
 		if m == u'create':
 			gl = GameList()
 			gl.coll = vc;
-			gl.description = self.request.get(u'name')
+			gl.description = self.request.get(u'name').strip(u'"')
 			gl.put()
 			self.response.set_status(200)
 		elif m == u'scan':
