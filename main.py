@@ -294,7 +294,7 @@ class Api(webapp.RequestHandler):
 		for i in range(1, 10):
 			ve = VideoEntry()
 			ve.videoid = self.request.get(u'game' + unicode(i))
-			if len(ve.videoid)==0: break
+			if len(ve.videoid)==0: continue
 			ve.number = i
 			ve.url = u'https://www.youtube.com/watch?v='+ve.videoid+'&feature=youtube_gdata'
 			ve.height = 90
